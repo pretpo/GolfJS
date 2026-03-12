@@ -1,7 +1,8 @@
 ## Overview
 
-Small utility layer that adds short aliases for common DOM, style, event, and iteration operations.
-It extends native prototypes to allow compact code when working with elements and collections.
+Small utility layer that adds short aliases for common DOM, style, event, clipboard, and iteration operations.
+
+It extends native prototypes to allow very compact code when working with elements, collections, and objects.
 
 Example:
 
@@ -11,30 +12,42 @@ $("#btn").CA("active").EC(() => alert("clicked"));
 
 ---
 
-## Quick Selectors
+## Core Shortcuts
 
 ```js
 const B = document.body;
-const $ = (selector, index = 0, root = document) =>
-    root.querySelectorAll(selector)[index];
+const $ = (s, k = 0, d = document) =>
+    d.querySelectorAll(s)[k];
+
+const L = href =>
+    window.location.href = "https://" + href;
+
+const ON = document.addEventListener;
 ```
 
 | Alias | Description |
 |---|---|
 | B | Shortcut for document.body |
-| $(s, k, d) | querySelectorAll shortcut. Returns element at index k (default 0) |
+| $(s, k, d) | querySelectorAll shortcut returning element at index k |
+| L(href) | Redirect to https URL |
+| ON | Alias for document.addEventListener |
 
 Example:
 
 ```js
 $(".item").CA("active");
+
+L("example.com");
+
+ON("keydown", e => console.log(e.key));
 ```
 
 ---
 
 ## Class Helpers
 
-Aliases for`classList` methods with validation.
+Aliases for`classList` methods with safety checks.
+Invalid tokens (empty strings, spaces, etc.) are ignored.
 
 | Alias | Original | Description |
 |---|---|---|
@@ -48,8 +61,12 @@ Example:
 ```js
 $("#box").CA("visible");
 $("#box").CR("hidden");
+
 $("#box").CT("open");
-$("#box").CC("active");
+
+if ($("#box").CC("active")) {
+    console.log("active");
+}
 ```
 
 ---
@@ -59,8 +76,8 @@ $("#box").CC("active");
 | Alias | Original | Description |
 |---|---|---|
 | EC | addEventListener("click") | Click event listener |
-| A | setAttribute | Set attribute |
-| R | remove | Remove element |
+| A | setAttribute / getAttribute | Set or get attribute |
+| R | remove | Remove element from DOM |
 
 Example:
 
@@ -68,6 +85,8 @@ Example:
 $("#btn")
     .A("data-id", 5)
     .EC(() => console.log("clicked"));
+
+const id = $("#btn").A("data-id");
 
 $("#box").R();
 ```
@@ -84,12 +103,15 @@ Example:
 
 ```js
 const div = document.createElement("div");
+
 B.AC(div);
 ```
 
 ---
 
 ## Content Properties
+
+Property aliases for common DOM content fields.
 
 | Alias | Original |
 |---|---|
@@ -100,12 +122,15 @@ Example:
 
 ```js
 $("#title").T = "Hello";
+
 $("#list").H = "<li>Item</li>";
 ```
 
 ---
 
 ## Style Properties
+
+Short aliases for common inline style properties.
 
 | Alias | CSS Property |
 |---|---|
@@ -119,8 +144,13 @@ Example:
 
 ```js
 $("#box").SD = "none";
+
 $("#box").SO = "0.5";
+
 $("#box").ST = "scale(1.2)";
+
+$("#box").SW = "200px";
+$("#box").SH = "100px";
 ```
 
 ---
@@ -138,7 +168,7 @@ Adds a short`forEach` alias.
 Example:
 
 ```js
-$(".item", 0).parentNode.children.F(el => {
+document.querySelectorAll(".item").F(el => {
     el.CA("active");
 });
 ```
@@ -146,6 +176,8 @@ $(".item", 0).parentNode.children.F(el => {
 ---
 
 ## Object Iteration
+
+Utilities for iterating object keys or values.
 
 | Alias | Description |
 |---|---|
@@ -158,6 +190,7 @@ Example:
 const obj = { a: 1, b: 2 };
 
 obj.FK(key => console.log(key));
+
 obj.FO(value => console.log(value));
 ```
 
@@ -168,7 +201,7 @@ obj.FO(value => console.log(value));
 | Alias | Description |
 |---|---|
 | CP(text) | Copy text to clipboard |
-| ID(id) | getElementById shortcut |
+| ID(id) | Shortcut for getElementById |
 | T(fn, ms, ...args) | setTimeout shortcut |
 
 Example:
