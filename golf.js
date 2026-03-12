@@ -1,5 +1,7 @@
 const B = document.body;
 const $ = (s, k, d) => (d || document).querySelectorAll(s)[k || 0];
+const L = href => window.location.href = 'https://' + href;
+const ON = document.addEventListener;
 
 (() => {
     const def = (obj, key, value) => {
@@ -74,10 +76,12 @@ const $ = (s, k, d) => (d || document).querySelectorAll(s)[k || 0];
             return this;
         },
         A: function (name, value) {
-            if (!this || typeof this.setAttribute !== "function") return this;
-            if (typeof name !== "string" || name.trim() === "") return this;
-            this.setAttribute(name, String(value));
-            return this;
+            if (!this || typeof this.setAttribute !== "function") return false;
+            if (typeof name !== "string" || name.trim() === "") return false;
+            if (typeof value !== "undefined") {
+                this.setAttribute(name, value);
+            }
+            return this.getAttribute(name);
         },
         R: function () {
             if (!this) return null;
